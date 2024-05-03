@@ -1,0 +1,67 @@
+# --- Simulation time control parameters ---
+time.stop_time                           = 30000.0             # Max (simulated) time to evolve [s]
+time.max_step                            = 50                  
+time.fixed_dt                            = 1.0                 # Fixed timestep size (in seconds). If negative, then time.cfl is used
+time.checkpoint_interval                 = -1                  
+incflo.physics                           = ABL                 # List of physics models to include in simulation.
+incflo.verbose                           = 3                   
+io.check_file                            = chk                 
+incflo.use_godunov                       = true                
+incflo.godunov_type                      = weno_z              
+turbulence.model                         = OneEqKsgsM84        
+TKE.source_terms                         = KsgsM84Src          
+nodal_proj.mg_rtol                       = 1e-06               
+nodal_proj.mg_atol                       = 1e-12               
+mac_proj.mg_rtol                         = 1e-06               
+mac_proj.mg_atol                         = 1e-12               
+diffusion.mg_rtol                        = 1e-06               
+diffusion.mg_atol                        = 1e-12               
+temperature_diffusion.mg_rtol            = 1e-10               
+temperature_diffusion.mg_atol            = 1e-13               
+incflo.gravity                           = 0.0 0.0 -9.81       # Gravitational acceleration vector (x,y,z) [m/s^2]
+incflo.density                           = 1.2456              # Fluid density [kg/m^3]
+transport.viscosity                      = 1.771e-05           # Fluid dynamic viscosity [kg/m-s]
+transport.laminar_prandtl                = 0.7                 # Laminar prandtl number
+transport.turbulent_prandtl              = 0.3333              # Turbulent prandtl number
+
+# --- Geometry and Mesh ---
+geometry.prob_lo                         = 0.0 0.0 0.0         
+geometry.prob_hi                         = 1000.0 1000.0 1000.0
+amr.n_cell                               = 32 32 32            # Number of cells in x, y, and z directions
+amr.max_level                            = 0                   
+geometry.is_periodic                     = 1 1 0               
+zlo.type                                 = wall_model          
+zlo.tke_type                             = zero_gradient       
+zhi.type                                 = slip_wall           
+zhi.temperature_type                     = fixed_gradient      
+
+# --- ABL parameters ---
+ICNS.source_terms                        = BoussinesqBuoyancy ABLMesoForcingMom
+ABL.stats_output_frequency               = 1                   
+ABL.stats_output_format                  = netcdf              
+Temperature.source_terms                 = ABLMesoForcingTemp  
+ABLMesoForcingMom.forcing_scheme         = direct              
+ABLMesoForcingTemp.forcing_scheme        = direct              
+ABL.initial_condition_input_file         = init.nc             
+ABL.mesoscale_forcing                    = MMC.nc              
+incflo.velocity                          = 0.0 0.0 0.0         
+ABLForcing.abl_forcing_height            = 150.0               
+ABL.kappa                                = 0.4                 
+ABL.normal_direction                     = 2                   
+ABL.surface_roughness_z0                 = 0.0001              
+ABL.reference_temperature                = 300.0               
+ABL.surface_temp_rate                    = 0.0                 
+ABL.mo_beta_m                            = 16.0                # Monin-Obukhov Beta m parameter
+ABL.mo_gamma_m                           = 5.0                 # Monin-Obukhov Gamma m parameter
+ABL.mo_gamma_h                           = 5.0                 # Monin-Obukhov Gamma h parameter
+ABL.random_gauss_mean                    = 0.0                 
+ABL.random_gauss_var                     = 1.0                 
+BoussinesqBuoyancy.reference_temperature = 300.0               
+ABL.temperature_heights                  = 0 500 1000          
+ABL.temperature_values                   = 300.0 300.0 300.0   
+time.plot_interval                       = -1                  
+io.plot_file                             = plt                 
+io.KE_int                                = -1                  
+
+#---- extra params ----
+#== END AMR-WIND INPUT ==
